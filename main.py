@@ -1,37 +1,34 @@
-import turtle
 from turtle import Turtle, Screen
-import random
+import time
 
 is_race_on = True
 screen = Screen()
-screen.setup(width=500, height=500)
-user_bet = screen.textinput("Let's bet", "Which color turtle will win ?")
+screen.setup(width=600, height=600)
+screen.title("Snake game")
+screen.bgcolor("black")
+shape = "square"
+color = "white"
+start = 0
 
-colors = ["red", "green", "yellow", "blue", "purple", "green"]
-all_turtle = []
+at_end = False
+snakes = []
+for i in range(0, 4):
+    snake = Turtle(shape=shape)
+    snake.goto(start, 0)
+    start -= 20
+    snake.color(color)
+    snake.penup()
+    snake.speed("slow")
+    snakes.append(snake)
 
-init_point = - 175
-for c in range(0, len(colors)):
-    t = Turtle(shape="turtle")
-    t.penup()
-    t.color(colors[c])
-    init_point = init_point + 50
-    t.goto(-230, init_point)
-    all_turtle.append(t)
+while not at_end:
+    screen.update()
+    time.sleep(0.1)
+    for seg in range((len(snakes)-1), 0, -1):
+        x = snakes[seg-1].xcor()
+        y = snakes[seg-1].ycor()
+        snakes[seg].goto(x, y)
 
-if user_bet:
-    is_race_on = True
-
-while is_race_on:
-    for t in all_turtle:
-        if t.xcor() > 230:
-            is_race_on = False
-            if t.pencolor() == user_bet:
-                print(f"You've won. The wining turtle color is {t.pencolor()}")
-            else:
-                print(f"You've lost. The wining turtle color is {t.pencolor()}")
-
-        move_by = random.randint(0, 10)
-        t.forward(move_by)
+    snakes[0].forward(10)
 
 screen.exitonclick()
